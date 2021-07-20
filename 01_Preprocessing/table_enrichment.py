@@ -35,5 +35,5 @@ data.BMI[(data.BMI.isnull()) & (data.Outcome == 0) ] = data.BMI[data.Outcome == 
 #checa novamente se ainda existem dados nulos
 print(data.isnull().sum())
 
-#cria um csv com os novos dados
-data.to_csv('teste.csv')
+#preenche o csv original com os novos dados
+data.to_csv('diabetes_dataset.csv')
