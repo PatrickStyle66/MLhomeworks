@@ -1,4 +1,6 @@
 import pandas as pd
+from sklearn.tree import DecisionTreeClassifier
+from sklearn import tree
 #carregando a base
 data = pd.read_csv('diabetes_dataset.csv')
 
@@ -35,5 +37,15 @@ data.BMI[(data.BMI.isnull()) & (data.Outcome == 0) ] = data.BMI[data.Outcome == 
 #checa novamente se ainda existem dados nulos
 print(data.isnull().sum())
 
-#preenche o csv original com os novos dados
+#cria uma árvore de decisão para ajudar a escolher os atributos mais importantes
+clf = DecisionTreeClassifier(random_state=1234)
+attrs = data.drop(data.columns[[0,9]], axis=1, inplace=False)
+Dtree = clf.fit(attrs,data.Outcome)
+#determina a importância de cada atributo
+importance = Dtree.feature_importances_
+for i,v in enumerate(importance):
+    print('atributo: %0d, Score: %.5f' % (i,v))
+#remove os atributos considerados menos importantes
+data.drop(data.columns[[0,1,3,6,7]],axis=1, inplace=True)
+#Recria o csv com as novas informações
 data.to_csv('diabetes_dataset.csv')
